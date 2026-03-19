@@ -9,7 +9,7 @@
         <Skills />
         <Education />
         <Blog />
-        <Contact />
+<!--        <Contact />-->
       </div>
       <Footer />
     </main>

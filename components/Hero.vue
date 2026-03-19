@@ -53,6 +53,7 @@ const links = [
   { label: 'Google Scholar', href: 'https://scholar.google.com/citations?user=lYSo4aUAAAAJ', icon: '◈' },
   { label: 'GitHub',         href: 'https://github.com/Aasthapaudel',                         icon: '⌥' },
   { label: 'LinkedIn',       href: 'https://www.linkedin.com/in/aastha-paudel-1b3b001b9/',    icon: '↗' },
+  { label: 'Email',          href: 'mailto:aasthapdl121@gmail.com',                            icon: '✉' },
   { label: 'Blog',           href: 'https://aastechblog.blogspot.com',                         icon: '✍' },
 ]
 </script>

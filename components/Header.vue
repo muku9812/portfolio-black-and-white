@@ -3,29 +3,43 @@
     <!-- Profile Block -->
     <div class="profile fade-up">
       <div class="avatar-wrap">
-        <img src="https://www.freepik.com/premium-vector/cute-woman-avatar-profile-vector-illustration_146713188.htm" alt="Aastha Paudel" class="avatar" />
+        <img src="https://www.shutterstock.com/image-photo/head-shot-beautiful-young-indian-260nw-2592061439.jpg" alt="Aastha Paudel" class="avatar" />
         <div class="avatar-ring" />
       </div>
       <h1 class="name">Aastha Paudel</h1>
       <p class="role">AI &amp; ML Researcher</p>
 
       <div class="contact-links">
-        <a href="mailto:aasthapdl121@gmail.com" class="contact-item" title="Email">
+
+        <!-- Email -->
+        <a
+            :href="emailRevealed ? 'mailto:aasthapdl121@gmail.com' : '#'"
+            class="contact-item"
+            :title="emailRevealed ? 'aasthapdl121@gmail.com' : 'Click to reveal email'"
+            @click.prevent="revealEmail"
+        >
           <span class="icon">✉</span>
-          <span>aasthapdl121@gmail.com</span>
+          <span class="contact-text" :class="{ animating: emailAnimating }">{{ displayEmail }}</span>
         </a>
-        <a href="https://github.com/Aasthapaudel" target="_blank" class="contact-item" title="GitHub">
+
+        <!-- GitHub -->
+        <a href="https://github.com/Aasthapaudel" target="_blank" class="contact-item">
           <span class="icon">⌥</span>
           <span>github.com/Aasthapaudel</span>
         </a>
-        <a href="https://www.linkedin.com/in/aastha-paudel-1b3b001b9/" target="_blank" class="contact-item" title="LinkedIn">
+
+        <!-- LinkedIn -->
+        <a href="https://www.linkedin.com/in/aastha-paudel-1b3b001b9/" target="_blank" class="contact-item">
           <span class="icon">↗</span>
           <span>LinkedIn</span>
         </a>
-        <a href="https://scholar.google.com" target="_blank" class="contact-item" title="Google Scholar">
+
+        <!-- Google Scholar -->
+        <a href="https://scholar.google.com" target="_blank" class="contact-item">
           <span class="icon">◈</span>
           <span>Google Scholar</span>
         </a>
+
       </div>
     </div>
 
@@ -43,35 +57,26 @@
         {{ item.label }}
       </a>
     </nav>
-
-    <!-- Footer credit -->
-    <p class="sidebar-credit">
-      Inspired by
-      <a href="https://jonbarron.info/" target="_blank">Jon Barron</a>
-    </p>
   </aside>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 
+// ── Nav ────────────────────────────────────────────────
 const navItems = [
-  { id: 'about',        label: 'About' },
-  { id: 'research',     label: 'Research' },
-  { id: 'projects',     label: 'Projects' },
-  { id: 'skills',       label: 'Skills' },
-  { id: 'education',    label: 'Education' },
-  { id: 'experience',   label: 'Experience' },
-  { id: 'awards',       label: 'Awards' },
-  { id: 'blog',         label: 'Blog' },
-  { id: 'contact',      label: 'Contact' },
+  { id: 'about',      label: 'About' },
+  { id: 'research',   label: 'Research' },
+  { id: 'projects',   label: 'Projects' },
+  { id: 'skills',     label: 'Skills' },
+  { id: 'education',  label: 'Education' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'awards',     label: 'Awards' },
+  { id: 'blog',       label: 'Blog' },
 ]
 
 const active = ref('about')
-
-function setActive(id) {
-  active.value = id
-}
+function setActive(id) { active.value = id }
 
 function onScroll() {
   for (const item of [...navItems].reverse()) {
@@ -85,6 +90,92 @@ function onScroll() {
 
 onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
 onUnmounted(() => window.removeEventListener('scroll', onScroll))
+
+// ── Scramble / Reveal ──────────────────────────────────
+const REAL_EMAIL = 'aasthapdl121@gmail.com'
+const CHARS      = 'abcdefghijklmnopqrstuvwxyz0123456789!#$%&*?'
+
+const emailRevealed  = ref(false)
+const emailAnimating = ref(false)
+const displayEmail   = ref('')
+
+function randomChar(original) {
+  if (['@', '.', '+', ' ', '-', '_'].includes(original)) return original
+  return CHARS[Math.floor(Math.random() * CHARS.length)]
+}
+
+function makeRandom(template) {
+  return template.split('').map(randomChar).join('')
+}
+
+let shuffleInterval = null
+let shuffleTimeout  = null
+let frozenEmail     = ''
+
+function startShuffle() {
+  displayEmail.value   = makeRandom(REAL_EMAIL)
+  emailAnimating.value = true
+
+  shuffleInterval = setInterval(() => {
+    displayEmail.value = makeRandom(REAL_EMAIL)
+  }, 80)
+
+  // After 2s — stop and freeze on whatever random string it landed on
+  shuffleTimeout = setTimeout(() => {
+    clearInterval(shuffleInterval)
+    shuffleInterval      = null
+    frozenEmail          = displayEmail.value   // save the frozen hash
+    emailAnimating.value = false
+  }, 2000)
+}
+
+function stopShuffle() {
+  clearInterval(shuffleInterval)
+  clearTimeout(shuffleTimeout)
+  shuffleInterval = null
+  shuffleTimeout  = null
+}
+
+// Click → animate char-by-char from frozen hash → real email
+function revealEmail() {
+  if (emailRevealed.value) {
+    window.location.href = 'mailto:aasthapdl121@gmail.com'
+    return
+  }
+
+  // If still shuffling, stop it first
+  stopShuffle()
+  emailAnimating.value = true
+
+  const target  = REAL_EMAIL.split('')
+  // Start from whatever is currently displayed (frozen or mid-shuffle)
+  const current = displayEmail.value.padEnd(REAL_EMAIL.length, randomChar('x')).split('')
+  let   step    = 0
+
+  const interval = setInterval(() => {
+    // Lock characters one by one left-to-right
+    // Meanwhile keep randomising the unlocked ones for ~3 passes each
+    for (let i = 0; i < target.length; i++) {
+      if (i < step) {
+        current[i] = target[i]           // locked ✓
+      } else {
+        current[i] = randomChar(target[i]) // still dancing
+      }
+    }
+    displayEmail.value = current.join('')
+    step++
+
+    if (step > target.length) {
+      clearInterval(interval)
+      displayEmail.value   = REAL_EMAIL
+      emailRevealed.value  = true
+      emailAnimating.value = false
+    }
+  }, 45)
+}
+
+onMounted(() => startShuffle())
+onUnmounted(() => stopShuffle())
 </script>
 
 <style scoped>
@@ -108,33 +199,34 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
 .avatar-wrap {
   position: relative;
-  width: 88px;
-  height: 88px;
-  margin-bottom: 0.6rem;
+  width: 160px;
+  height: 160px;
+  margin-bottom: 1rem;
 }
 .avatar {
-  width: 88px;
-  height: 88px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--teal-glow);
+  border: 3px solid var(--teal-glow);
   display: block;
 }
 .avatar-ring {
   position: absolute;
-  inset: -4px;
+  inset: -6px;
   border-radius: 50%;
-  border: 1px dashed var(--teal-glow);
+  border: 1.5px dashed var(--teal-glow);
   animation: spin 20s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .name {
   font-family: var(--font-head);
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: var(--text-1);
   line-height: 1.2;
+  margin-top: 0.2rem;
 }
 .role {
   font-family: var(--font-mono);
@@ -155,8 +247,20 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
 }
 .contact-item:hover { color: var(--teal); }
+
+.contact-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  transition: color 0.3s;
+}
+.contact-text.animating {
+  color: var(--teal);
+}
+
 .icon {
   font-size: 12px;
   color: var(--teal);
@@ -194,14 +298,6 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 }
 .nav-item.active .nav-dot { transform: scale(1.6); }
 
-/* Credit */
-.sidebar-credit {
-  margin-top: auto;
-  font-size: 11px;
-  color: var(--text-3);
-}
-.sidebar-credit a { color: var(--text-3); text-decoration: underline; }
-
 /* Mobile */
 @media (max-width: 768px) {
   .sidebar {
@@ -217,10 +313,9 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
     gap: 1rem;
   }
   .profile { flex-direction: row; align-items: center; gap: 1rem; }
-  .avatar-wrap { width: 56px; height: 56px; margin-bottom: 0; }
-  .avatar { width: 56px; height: 56px; }
+  .avatar-wrap { width: 80px; height: 80px; margin-bottom: 0; }
+  .avatar { width: 80px; height: 80px; }
   .contact-links { display: none; }
   .nav { flex-direction: row; flex-wrap: wrap; }
-  .sidebar-credit { display: none; }
 }
 </style>
