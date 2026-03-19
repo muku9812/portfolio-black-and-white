@@ -8,7 +8,7 @@
         <Projects />
         <Skills />
         <Education />
-        <Blog />
+<!--        <Blog />-->
 <!--        <Contact />-->
       </div>
       <Footer />
@@ -28,11 +28,13 @@ useHead({
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 }
 .content-inner {
   flex: 1;
+  width: 100%;
+  max-width: 100%;        /* ← was 820px, this was the culprit */
   padding: 0 3rem 2rem;
-  max-width: 820px;
 }
 @media (max-width: 1024px) {
   .content-inner { padding: 0 2rem 2rem; }

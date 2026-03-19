@@ -3,12 +3,16 @@
     <span class="section-label">// 04 — Skills</span>
     <h2 class="section-title">Technical &amp; Professional Skills</h2>
 
-    <div class="skills-grid">
-      <div v-for="group in skillGroups" :key="group.field" class="card skill-card">
-        <div class="skill-field">{{ group.field }}</div>
-        <h4 class="skill-group-title">{{ group.title }}</h4>
-        <div class="skill-tags">
-          <span v-for="s in group.skills" :key="s" class="tag">{{ s }}</span>
+    <div class="skills-list">
+      <div v-for="group in skillGroups" :key="group.field" class="skill-row">
+        <div class="row-left">
+          <div class="skill-field">{{ group.field }}</div>
+          <h4 class="skill-group-title">{{ group.title }}</h4>
+        </div>
+        <div class="row-right">
+          <div class="skill-tags">
+            <span v-for="s in group.skills" :key="s" class="tag">{{ s }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -48,13 +52,41 @@ const skillGroups = [
 <style scoped>
 .section { padding: 2.5rem 0; }
 
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 0.9rem;
+.skills-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
-.skill-card { }
+.skill-row {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s, padding 0.2s;
+}
+.skill-row:first-child { border-top: 1px solid var(--border); }
+.skill-row:last-child  { border-bottom: none; }
+
+.skill-row:hover {
+  background: var(--teal-dim);
+  border-radius: var(--radius);
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}
+
+.row-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.row-right {
+  display: flex;
+  align-items: center;
+}
 
 .skill-field {
   font-family: var(--font-mono);
@@ -62,7 +94,6 @@ const skillGroups = [
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: var(--teal);
-  margin-bottom: 0.3rem;
 }
 
 .skill-group-title {
@@ -70,8 +101,18 @@ const skillGroups = [
   font-size: 0.88rem;
   font-weight: 600;
   color: var(--text-1);
-  margin-bottom: 0.7rem;
 }
 
-.skill-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+@media (max-width: 768px) {
+  .skill-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
 </style>

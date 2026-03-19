@@ -60,7 +60,7 @@ const links = [
 
 <style scoped>
 .section { padding: 3rem 0 2rem; }
-.bio { color: var(--text-2); max-width: 660px; }
+.bio { color: var(--text-2); max-width: 100%; }
 .bio strong { color: var(--text-1); font-weight: 500; }
 .bio em { color: var(--teal); font-style: normal; }
 

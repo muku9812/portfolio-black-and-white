@@ -72,7 +72,7 @@ const navItems = [
   { id: 'education',  label: 'Education' },
   { id: 'experience', label: 'Experience' },
   { id: 'awards',     label: 'Awards' },
-  { id: 'blog',       label: 'Blog' },
+  // { id: 'blog',       label: 'Blog' },
 ]
 
 const active = ref('about')

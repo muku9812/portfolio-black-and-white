@@ -8,7 +8,7 @@
       <div class="timeline">
         <div v-for="(edu, i) in education" :key="i" class="timeline-item">
           <div class="tl-dot" />
-          <div class="tl-body card">
+          <div class="tl-body">
             <div class="tl-meta">
               <span class="tl-years">{{ edu.years }}</span>
               <span class="tl-badge" v-if="edu.badge">{{ edu.badge }}</span>
@@ -34,7 +34,7 @@
       <div class="timeline">
         <div v-for="(exp, i) in experience" :key="i" class="timeline-item">
           <div class="tl-dot accent" />
-          <div class="tl-body card">
+          <div class="tl-body">
             <div class="tl-meta">
               <span class="tl-years">{{ exp.period }}</span>
               <span class="tl-badge amber" v-if="exp.current">● Current</span>
@@ -52,7 +52,7 @@
       <div class="timeline">
         <div v-for="(v, i) in volunteering" :key="i" class="timeline-item">
           <div class="tl-dot dim" />
-          <div class="tl-body card">
+          <div class="tl-body">
             <div class="tl-meta">
               <span class="tl-years">{{ v.period }}</span>
             </div>
@@ -73,10 +73,10 @@
       <span class="section-label">// 07 — Honors &amp; Awards</span>
       <h2 class="section-title">Recognition</h2>
 
-      <div class="awards-grid">
-        <div v-for="a in awards" :key="a.title" class="card award-card">
+      <div class="awards-list">
+        <div v-for="a in awards" :key="a.title" class="award-row">
           <span class="award-icon">{{ a.icon }}</span>
-          <div>
+          <div class="award-body">
             <h4 class="award-title">{{ a.title }}</h4>
             <p class="award-desc">{{ a.desc }}</p>
           </div>
@@ -203,32 +203,54 @@ const awards = [
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: var(--text-3);
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 /* Timeline */
-.timeline { display: flex; flex-direction: column; gap: 0.8rem; }
-.timeline-item { display: flex; gap: 1rem; align-items: flex-start; }
+.timeline {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s, padding 0.2s;
+  width: 100%;
+}
+.timeline-item:first-child { border-top: 1px solid var(--border); }
+.timeline-item:last-child  { border-bottom: none; }
+
+.timeline-item:hover {
+  background: var(--teal-dim);
+  border-radius: var(--radius);
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}
 
 .tl-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--teal);
-  margin-top: 1.1rem;
+  margin-top: 0.45rem;
   flex-shrink: 0;
-  box-shadow: 0 0 8px var(--teal-glow);
+  box-shadow: 0 0 6px var(--teal-glow);
 }
-.tl-dot.accent { background: var(--amber); box-shadow: 0 0 8px rgba(240,168,84,0.3); }
+.tl-dot.accent { background: var(--amber); box-shadow: 0 0 6px rgba(217,119,6,0.3); }
 .tl-dot.dim    { background: var(--text-3); box-shadow: none; }
 
-.tl-body { flex: 1; }
+.tl-body { flex: 1; width: 100%; }
 
 .tl-meta {
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.3rem;
 }
 .tl-years {
   font-family: var(--font-mono);
@@ -245,9 +267,9 @@ const awards = [
   border: 1px solid var(--teal-glow);
 }
 .tl-badge.amber {
-  background: rgba(240,168,84,0.1);
+  background: rgba(217,119,6,0.08);
   color: var(--amber);
-  border-color: rgba(240,168,84,0.3);
+  border-color: rgba(217,119,6,0.25);
 }
 
 .tl-title {
@@ -255,14 +277,14 @@ const awards = [
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-1);
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.1rem;
 }
 .tl-inst {
   font-size: 12.5px;
   color: var(--teal);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
-.tl-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.25rem; }
+.tl-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.2rem; }
 .tl-bullets li {
   font-size: 13px;
   color: var(--text-2);
@@ -277,10 +299,33 @@ const awards = [
   font-size: 11px;
 }
 
-/* Awards */
-.awards-grid { display: flex; flex-direction: column; gap: 0.8rem; }
-.award-card  { display: flex; align-items: flex-start; gap: 1rem; }
+/* Awards flat rows */
+.awards-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.award-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s, padding 0.2s;
+}
+.award-row:first-child { border-top: 1px solid var(--border); }
+.award-row:last-child  { border-bottom: none; }
+
+.award-row:hover {
+  background: var(--teal-dim);
+  border-radius: var(--radius);
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}
+
 .award-icon  { font-size: 1.4rem; flex-shrink: 0; }
+.award-body  { flex: 1; }
 .award-title {
   font-family: var(--font-head);
   font-size: 0.9rem;

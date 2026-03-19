@@ -9,16 +9,17 @@
       Industrial Experience
       <span class="group-line" />
     </h3>
-    <div class="projects-grid">
-      <div v-for="p in industrial" :key="p.title" class="card project-card">
-        <div class="project-top">
+    <div class="projects-list">
+      <div v-for="p in industrial" :key="p.title" class="project-row">
+        <div class="row-left">
           <span class="project-type">{{ p.type }}</span>
-          <span class="project-featured" v-if="p.featured">★ Featured</span>
+          <h4 class="project-title">{{ p.title }}</h4>
         </div>
-        <h4 class="project-title">{{ p.title }}</h4>
-        <p class="project-desc">{{ p.desc }}</p>
-        <div class="project-tags">
-          <span v-for="t in p.tags" :key="t" class="tag">{{ t }}</span>
+        <div class="row-right">
+          <p class="project-desc">{{ p.desc }}</p>
+          <div class="project-tags">
+            <span v-for="t in p.tags" :key="t" class="tag">{{ t }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -30,29 +31,35 @@
       <span class="group-line" />
     </h3>
 
-    <!-- Featured card -->
-    <div class="card featured-card">
-      <span class="feat-label">★ Featured Major Project</span>
-      <h4 class="project-title large">NagarGPT — LLM-Based Multilingual Voice Chatbot</h4>
-      <p class="project-desc">
-        A domain-adaptive AI chatbot with multilingual text-voice I/O, delivering contextual
-        responses via an LLM + RAG pipeline. Scaled for real-world accessibility with RESTful
-        API deployment using Ngrok.
-      </p>
-      <div class="project-tags" style="margin-top:0.9rem">
-        <span v-for="t in nagarTags" :key="t" class="tag">{{ t }}</span>
+    <!-- Featured row -->
+    <div class="featured-row">
+      <div class="row-left">
+        <span class="feat-label">★ Featured</span>
+        <h4 class="project-title large">NagarGPT — LLM-Based Multilingual Voice Chatbot</h4>
+      </div>
+      <div class="row-right">
+        <p class="project-desc">
+          A domain-adaptive AI chatbot with multilingual text-voice I/O, delivering contextual
+          responses via an LLM + RAG pipeline. Scaled for real-world accessibility with RESTful
+          API deployment using Ngrok.
+        </p>
+        <div class="project-tags">
+          <span v-for="t in nagarTags" :key="t" class="tag">{{ t }}</span>
+        </div>
       </div>
     </div>
 
-    <div class="projects-grid" style="margin-top:1rem">
-      <div v-for="p in academic" :key="p.title" class="card project-card">
-        <div class="project-top">
+    <div class="projects-list">
+      <div v-for="p in academic" :key="p.title" class="project-row">
+        <div class="row-left">
           <span class="project-type">{{ p.type }}</span>
+          <h4 class="project-title">{{ p.title }}</h4>
         </div>
-        <h4 class="project-title">{{ p.title }}</h4>
-        <p class="project-desc">{{ p.desc }}</p>
-        <div class="project-tags">
-          <span v-for="t in p.tags" :key="t" class="tag">{{ t }}</span>
+        <div class="row-right">
+          <p class="project-desc">{{ p.desc }}</p>
+          <div class="project-tags">
+            <span v-for="t in p.tags" :key="t" class="tag">{{ t }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -129,7 +136,7 @@ const academic = [
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: var(--text-3);
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 .group-line {
   flex: 1;
@@ -137,20 +144,60 @@ const academic = [
   background: var(--border);
 }
 
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 0.9rem;
-}
-
-.project-card { display: flex; flex-direction: column; gap: 0.5rem; }
-
-.project-top {
+/* List container */
+.projects-list {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.2rem;
+  flex-direction: column;
+  width: 100%;
 }
+
+/* Each flat row */
+.project-row,
+.featured-row {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  width: 100%;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.project-row:first-child,
+.featured-row { border-top: 1px solid var(--border); }
+
+.project-row:hover,
+.featured-row:hover {
+  background: var(--teal-dim);
+  border-radius: var(--radius);
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}
+
+.project-row:last-child { border-bottom: none; }
+
+/* Featured styling */
+.featured-row {
+  border-top: 1px solid var(--teal-glow);
+  border-bottom: 1px solid var(--teal-glow);
+  margin-bottom: 0;
+}
+
+/* Left col */
+.row-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding-top: 0.1rem;
+}
+
+/* Right col */
+.row-right {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
 .project-type {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -158,42 +205,42 @@ const academic = [
   letter-spacing: 0.12em;
   color: var(--teal);
 }
-.project-featured {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--amber);
-}
 
-.project-title {
-  font-family: var(--font-head);
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-1);
-  line-height: 1.3;
-}
-.project-title.large { font-size: 1.05rem; }
-
-.project-desc {
-  font-size: 13px;
-  color: var(--text-2);
-  line-height: 1.65;
-  flex: 1;
-}
-.project-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: auto; padding-top: 0.5rem; }
-
-/* Featured card */
-.featured-card {
-  border-color: var(--teal-glow);
-  background: linear-gradient(135deg, var(--bg2) 0%, rgba(99,202,183,0.04) 100%);
-  margin-bottom: 0.2rem;
-}
 .feat-label {
   font-family: var(--font-mono);
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--teal);
-  display: block;
-  margin-bottom: 0.5rem;
+  color: var(--amber);
+}
+
+.project-title {
+  font-family: var(--font-head);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-1);
+  line-height: 1.3;
+}
+.project-title.large { font-size: 1rem; }
+
+.project-desc {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.65;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Collapse on small screens */
+@media (max-width: 768px) {
+  .project-row,
+  .featured-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
 }
 </style>
